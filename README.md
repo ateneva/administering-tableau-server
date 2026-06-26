@@ -1,5 +1,23 @@
 
-# Install & Configure Tableau Server on Windows
+# Install & Configure Tableau Server
+
+A Linux version of Tableau Server will be hosted on a GCP virtual machine. The following steps will help you install and configure Tableau Server once the Linux VM is up and running.
+
+- [Install \& Configure Tableau Server](#install--configure-tableau-server)
+  - [Activate and Register Tableau](#activate-and-register-tableau)
+  - [Configure Initial Node Settings](#configure-initial-node-settings)
+  - [Initialize \& Start Tableau Server](#initialize--start-tableau-server)
+  - [Add Admin account](#add-admin-account)
+  - [Configure proxy so that Tableau Server is accessible from the internet](#configure-proxy-so-that-tableau-server-is-accessible-from-the-internet)
+  - [Perform Full Backup \& Restore](#perform-full-backup--restore)
+  - [Activate \& Deactivate licenses](#activate--deactivate-licenses)
+  - [Review and Update TSM configuration options](#review-and-update-tsm-configuration-options)
+  - [Allow access to the PostgreSQL repository](#allow-access-to-the-postgresql-repository)
+  - [Test SMTP connection for the configured email (as of 2020.2)](#test-smtp-connection-for-the-configured-email-as-of-20202)
+  - [Review and Apply pending changes](#review-and-apply-pending-changes)
+  - [Start and Stop Tableau Server](#start-and-stop-tableau-server)
+  - [Review TSM help commands](#review-tsm-help-commands)
+  - [Uninstall Tableau Server](#uninstall-tableau-server)
 
 ## Activate and Register Tableau
 
