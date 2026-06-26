@@ -45,7 +45,7 @@ resource "google_compute_instance" "tableau-server" {
     }
     queue_count = 0
     stack_type  = "IPV4_ONLY"
-    subnetwork  = "projects/qwiklabs-gcp-03-0cc159f8bae9/regions/eu-west4/subnetworks/default"
+    subnetwork  = "projects/your-project-id/regions/eu-west4/subnetworks/default"
   }
 }
 
