@@ -154,7 +154,6 @@ def create_hyper_file_from_csv(file_name, download_bucket_name, hyper_file_name)
             create_mode=CreateMode.CREATE_AND_REPLACE,  # re-create the hyper file schema.
             parameters=connection_parameters,
         ) as connection:
-
             # create 'Extract' schema in hyper
             connection.catalog.create_schema(schema=hyper_table.table_name.schema_name)
             connection.catalog.create_table(table_definition=hyper_table)
@@ -181,13 +180,11 @@ def create_hyper_file_from_csv(file_name, download_bucket_name, hyper_file_name)
                     blob.download_to_filename(csv)
                     print(f"{csv_name} downloaded successfully")
 
-                    count_in_hyper_table = (
-                        connection.execute_command(  # add to hyper file
-                            command=f"COPY {hyper_table.table_name} "
-                            f"from {escape_string_literal(csv_name)} "
-                            f"with "
-                            f"(format csv, NULL '', delimiter ',', header)"
-                        )
+                    count_in_hyper_table = connection.execute_command(  # add to hyper file
+                        command=f"COPY {hyper_table.table_name} "
+                        f"from {escape_string_literal(csv_name)} "
+                        f"with "
+                        f"(format csv, NULL '', delimiter ',', header)"
                     )
 
                     total_rows += count_in_hyper_table

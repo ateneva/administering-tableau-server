@@ -48,7 +48,6 @@ def download_wbks_from_owner(owners):
 
 def download_wbks_from_project(project):
     with server.auth.sign_in(tableau_auth):
-
         # page through all the workbooks on the Server and keep the relevant ones
         wbks_to_review = {
             wbk.name: wbk.id

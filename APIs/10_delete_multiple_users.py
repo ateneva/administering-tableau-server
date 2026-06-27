@@ -75,7 +75,6 @@ def delete_wbks(unlicensed_user_wbks):
 def delete_users(users_to_delete):
     # sign in
     with server.auth.sign_in(tableau_auth):
-
         # delete users
         for u, i in users_to_delete.items():
             server.users.remove(i)

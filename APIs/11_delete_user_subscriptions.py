@@ -1,5 +1,4 @@
 import tableauserverclient as TSC
-import json
 import datetime as dt
 
 now = dt.datetime.today().strftime("%Y-%m-%d %H:%M:%S")
@@ -24,7 +23,6 @@ def delete_subscriptions(
     server = TSC.Server(tableau_server, use_server_version=True)
 
     with server.auth.sign_in(tableau_auth):
-
         # get all users
         all_users, pagination_item = server.users.get()
 

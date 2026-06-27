@@ -1,7 +1,4 @@
 import tableauserverclient as TSC
-import json
-from pathlib import Path
-from glob import glob
 import datetime as dt
 
 now = dt.datetime.today().strftime("%Y-%m-%d %H:%M:%S")
