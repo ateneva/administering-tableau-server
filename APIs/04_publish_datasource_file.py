@@ -3,7 +3,9 @@ import tableauserverclient as TSC
 from pathlib import Path
 
 
-def publish_multiple_datasources(tableau_server, tableau_user, user_password, site_name, project_name, local_folder):
+def publish_multiple_datasources(
+    tableau_server, tableau_user, user_password, site_name, project_name, local_folder
+):
     # if you're connecting to the default site, pass empty string in site_name
 
     # authenticate with the correct site
@@ -16,7 +18,7 @@ def publish_multiple_datasources(tableau_server, tableau_user, user_password, si
         all_sites, pagination_item = server.sites.get()
         for site in all_sites:
             print(site.name)
-            if site_name == site.name or site_name == '':
+            if site_name == site.name or site_name == "":
                 all_projects, pagination_item = server.projects.get()
                 print(site.id, site.name, site.content_url, site.state)
 
@@ -31,14 +33,16 @@ def publish_multiple_datasources(tableau_server, tableau_user, user_password, si
                 for item in files_in_path:
                     if item.is_file():
                         item_name = item.name
-                        if item_name.endswith('.tdsx') or item_name.endswith('.hyper'):
+                        if item_name.endswith(".tdsx") or item_name.endswith(".hyper"):
                             print(item.name)
 
                             # define publishing variables
                             datasource = TSC.DatasourceItem(project_id)
-                            publish_path = f'{path_to_datasource}/{item_name}'
+                            publish_path = f"{path_to_datasource}/{item_name}"
                             publish_mode = TSC.Server.PublishMode.Overwrite
 
                             # publish the datasource
-                            datasource_= server.datasources.publish(datasource, publish_path, publish_mode)
+                            datasource_ = server.datasources.publish(
+                                datasource, publish_path, publish_mode
+                            )
                             print(f"Published {item_name} to {project_name}.")

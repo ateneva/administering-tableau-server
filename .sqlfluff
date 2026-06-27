@@ -1,0 +1,131 @@
+[sqlfluff]
+dialect = postgres
+
+[sqlfluff:indentation]
+tab_space_size = 4
+indent_unit = tab
+indented_joins = true
+indented_using_on = true
+indented_ctes = true
+indented_on_contents = true
+
+#################
+# ALIAS RULES
+#################
+
+# ALL "AS" should be aligned
+[sqlfluff:layout:type:alias_expression]
+spacing_before = align
+align_within = select_clause
+align_scope = bracketed
+
+# AS should be there in table aliases
+[sqlfluff:rules:aliasing.table]
+aliasing.table = explicit
+
+# AS should be there for renamed columns
+[sqlfluff:rules:aliasing.column]
+aliasing.column = explicit
+
+# AS should be there after SUM(), MAX() etc
+[sqlfluff:rules:aliasing.expression]
+aliasing.expression = explicit
+
+# use ALL numbers in GROUP BY, ORDER BY
+[sqlfluff:rules:ambiguous.column_references]
+group_by_and_order_by_style = explicit
+
+########################
+# CAPITALIZATION RULES
+########################
+
+[sqlfluff:rules:capitalisation.keywords]
+extended_capitalisation_policy = upper
+
+# all column names in lower case
+[sqlfluff:rules:capitalisation.identifiers]
+extended_capitalisation_policy = lower
+
+# all functions in upper case
+[sqlfluff:rules:capitalisation.functions]
+extended_capitalisation_policy = upper
+
+#################
+# JINJA RULES
+#################
+
+# leave only one space between jinja delimitters
+[sqlfluff:rules:jinja.padding]
+single_space = true
+
+#################
+# COMMA RULES
+#################
+
+# ensures commas are placed in the end
+[sqlfluff:rules:layout.commas]
+line_position = trailing
+
+# forbids trailing column comma
+[sqlfluff:rules:convention.select_trailing_comma]
+select_trailing_comma = forbid
+
+#################
+# SPACING RULES
+#################
+
+[sqlfluff:rules:layout.spacing]
+no_trailing_whitespace = true
+extra_whitespace = false
+
+# ensure consistent indentation
+[sqlfluff:rules:layout.indent]
+indent_unit = tab
+
+#################
+# STYLE RULES
+#################
+[sqlfluff:rules:layout.set_operators]
+set_operator_on_new_line = ['UNION', 'UNION ALL', 'UNION DISTINCT']
+
+########
+# JOINS
+########
+# simply "JOIN" defaults to INNER
+[sqlfluff:rules:ambiguous.join]
+fully_qualify_join_types = inner
+
+# use LEFT JOIN instead of RIGHT join
+[sqlfluff:rules:convention.left_join]
+
+# ensure join conditions are defined in logical order
+[sqlfluff:rules:structure.join_condition_order]
+preferred_first_table_in_join_clause = earlier
+
+########
+# CTE
+########
+# remove the subquery from inside the join and transform it into CTE
+[sqlfluff:rules:structure.subquery]
+forbid_subquery_in = join
+
+# ensure closing CTE brackets are on a new line
+[sqlfluff:rules:layout.cte_bracket]
+
+# ensure new line after a CTE
+[sqlfluff:rules:layout.cte_newline]
+
+# remove unsused CTE
+[sqlfluff:rules:structure.unused_cte]
+
+########
+# NULLS
+########
+# use COALESCE instead of IFULL / NVL (more transportable across SQL dialects)
+[sqlfluff:rules:convention.coalesce]
+
+# use IS NULL instead of = NULL
+[sqlfluff:rules:convention.is_null]
+
+# use nested CASE WHEN statements
+[sqlfluff:rules:structure.nested_case]

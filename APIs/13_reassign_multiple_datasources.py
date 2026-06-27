@@ -1,17 +1,13 @@
-
 import tableauserverclient as TSC
-import json
-from pathlib import Path
-from glob import glob
 import datetime as dt
 
-now = dt.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+now = dt.datetime.today().strftime("%Y-%m-%d %H:%M:%S")
 print(now)
 
-tableau_server = 'tableau server link'
-tableau_user = 'tableau admin username'
-user_password = 'tableau admin credentials'
-site_name = ''
+tableau_server = "tableau server link"
+tableau_user = "tableau admin username"
+user_password = "tableau admin credentials"
+site_name = ""
 # if you're connecting to the default site, pass empty string in site_name
 
 tableau_auth = TSC.TableauAuth(tableau_user, user_password, site_id=site_name)
@@ -51,16 +47,20 @@ def reassign_datasets(published_project, user_ids):
                 "connection_address": connection.server_address,
                 "connection_username": connection.username,
                 "first_created": str(dataset.created_at),
-                "last_updated": str(dataset.updated_at)
-                }
+                "last_updated": str(dataset.updated_at),
+            }
 
             old_owner_id = user_ids[0]
             new_owner_id = user_ids[1]
             if dataset.project_name == published_project:
                 dataset.owner_id = new_owner_id
                 server.datasources.update(dataset)
-                print(f'Re-assigned {dataset.name} from {dataset.project_name} from {old_owner_id} to {new_owner_id}')
+                print(
+                    f"Re-assigned {dataset.name} from {dataset.project_name} from {old_owner_id} to {new_owner_id}"
+                )
 
                 # owner re-assignment automatically resets credentials for Live datasources, so these need updating
                 if not dataset.has_extracts:
-                    print(f'Re-enter database credentials for datasource {dataset.name}')
+                    print(
+                        f"Re-enter database credentials for datasource {dataset.name}"
+                    )

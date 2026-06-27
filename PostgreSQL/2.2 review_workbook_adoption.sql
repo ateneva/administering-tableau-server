@@ -1,112 +1,132 @@
+WITH
+	wbks AS (
+		--- which are my most used sheets within a workbook?
+		--- when were they last viewed, how many times and by whom?
+		SELECT
+			prj.name         AS project,
+			v.workbook_id,
+			wb.name          AS workbook_name,
+			vs.view_id,
+			v.name           AS view_name,
+			v.repository_url AS view_url,
+			sou.name         AS view_created_by,
+			v.created_at     AS view_created_at,
+			v.index          AS view_tab_num_in_wbk,
+			v.title          AS view_title,
+			v.caption        AS view_description,
+			v.fields         AS fields_used_in_view,
 
-WITH WBKS AS (
-    --- which are my most used sheets within a workbook?
-    --- when were they last viewed, how many times and by whom?
-	SELECT
-	prj.name		 as project,
-	v.workbook_id,
-	wb.name 		 as workbook_name,
-	vs.view_id,
-	v.name 			 as view_name,
-	v.repository_url as view_url,
-	sou.name		 as view_created_by,
-	v.created_at     as view_created_at,
-	v.index          as view_tab_num_in_wbk,
-	v.title          as view_title,
-	v.caption        as view_description,
-	v.fields		 as fields_used_in_view,
+			STRING_AGG(
+				DISTINCT
+				vs.device_type, ', '
+			)                AS viewed_on,
 
-	STRING_AGG(distinct
-		vs.device_type, ', ')    as viewed_on,
+			STRING_AGG(
+				DISTINCT
+				su.friendly_name, ', '
+			)                AS viewed_by,
 
-	STRING_AGG(distinct
-		su.friendly_name, ', ')  as viewed_by,
+			MAX(vs.time)     AS last_viewed,
+			SUM(vs.nviews)   AS total_num_views
 
-	MAX(vs."time")   as last_viewed,
-	SUM(vs.nviews)   as total_num_views
+		FROM views_stats AS vs
+			INNER JOIN views AS v
+				ON vs.view_id = v.id
 
-	FROM views_stats vs
-	INNER JOIN views v
-	    ON vs.view_id = v.id
+			--- get viewer info ----
+			INNER JOIN users AS u
+				ON vs.user_id = u.id
 
-	--- get viewer info ----
-	INNER JOIN users u
-	    ON  vs.user_id = u.id
+			INNER JOIN system_users AS su
+				ON u.system_user_id = su.id
 
-	INNER JOIN system_users su
-	    ON su.id = u.system_user_id
+			-----get owner info------------
+			INNER JOIN users AS ou
+				ON v.owner_id = ou.id
 
-	-----get owner info------------
-	INNER JOIN users ou
-	    ON  v.owner_id = ou.id
+			INNER JOIN system_users AS sou
+				ON ou.system_user_id = sou.id
 
-	INNER JOIN system_users sou
-	    ON sou.id = ou.system_user_id
+			----get workbook info ----------
+			INNER JOIN public.workbooks AS wb
+				ON v.workbook_id = wb.id
 
-	 ----get workbook info ----------
-	INNER JOIN public.workbooks wb
-	 	ON v.workbook_id = wb.id
+			------get project info---------
+			INNER JOIN projects AS prj
+				ON wb.project_id = prj.id
 
-	 ------get project info---------
-	INNER JOIN projects prj
-		ON wb.project_id = prj.id
+		GROUP BY
+			prj.name,
+			v.workbook_id,
+			wb.name,
+			vs.view_id,
+			v.name,
+			v.repository_url,
+			sou.name,
+			v.created_at,
+			v.index,
+			v.title,
+			v.caption,
+			v.fields
 
-	GROUP BY 1,2,3,4,5,6,7,8,8,9,10,11,12
+		ORDER BY
+			v.workbook_id,
+			v.id
+	),
 
-	ORDER BY
-	workbook_id,
-	view_id
-)
+	subscriptions AS (
+		--- who has subscribed to my workbook views?
+		SELECT
+			sub.target_id,
+			sub.target_type,
+			MAX(sub.last_sent) AS subscription_last_sent,
 
-, SUBSCRIPTIONS AS (
-    --- who has subscribed to my workbook views?
-	SELECT
-	sub.target_id,
-	sub.target_type,
-	MAX(sub.last_sent)	as subscription_last_sent,
+			STRING_AGG(
+				DISTINCT
+				su.friendly_name, ', '
+			)                  AS subscribers
 
-	STRING_AGG(distinct
-		su.friendly_name, ', ')  as subscribers
+		FROM public.subscriptions AS sub
 
-	FROM public.subscriptions sub
+			-----get subscriber info------------
+			INNER JOIN users AS u
+				ON sub.user_id = u.id
 
-	-----get subscriber info------------
-	INNER JOIN users u
-	    ON sub.user_id = u.id
+			INNER JOIN system_users AS su
+				ON u.system_user_id = su.id
 
-	INNER JOIN system_users su
-	    ON su.id = u.system_user_id
-
-	GROUP BY 1,2
-)
+		GROUP BY
+			sub.target_id,
+			sub.target_type
+	)
 
 SELECT
-w.project,
-w.workbook_id,
-w.workbook_name,
-w.view_id,
-w.view_name,
-w.view_url,
-w.view_created_by,
-w.view_created_at,
-w.view_tab_num_in_wbk,
-w.view_title,
-w.view_description,
-w.fields_used_in_view,
-w.viewed_on,
-w.viewed_by,
-w.last_viewed,
-w.total_num_views,
-s.subscription_last_sent,
-s.subscribers,
-s.target_type
+	w.project,
+	w.workbook_id,
+	w.workbook_name,
+	w.view_id,
+	w.view_name,
+	w.view_url,
+	w.view_created_by,
+	w.view_created_at,
+	w.view_tab_num_in_wbk,
+	w.view_title,
+	w.view_description,
+	w.fields_used_in_view,
+	w.viewed_on,
+	w.viewed_by,
+	w.last_viewed,
+	w.total_num_views,
+	s.subscription_last_sent,
+	s.subscribers,
+	s.target_type
 
-FROM WBKS w
-LEFT JOIN SUBSCRIPTIONS s
-	ON w.view_id = s.target_id			--- capture view subscriptions
-		OR w.workbook_id = s.target_id	--- capture workbook subscriptions
-
+FROM wbks AS w
+	LEFT JOIN subscriptions AS s
+		ON
+			w.view_id = s.target_id			--- capture view subscriptions
+			OR w.workbook_id = s.target_id	--- capture workbook subscriptions
 
 ORDER BY
-workbook_id,
-view_id
+	w.workbook_id,
+	w.view_id

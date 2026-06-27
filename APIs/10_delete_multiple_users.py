@@ -1,13 +1,13 @@
 import tableauserverclient as TSC
 import datetime as dt
 
-now = dt.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+now = dt.datetime.today().strftime("%Y-%m-%d %H:%M:%S")
 print(now)
 
-tableau_server = 'tableau server link'
-tableau_user = 'tableau admin username'
-user_password = 'tableau admin credentials'
-site_name = 'tableau site name'
+tableau_server = "tableau server link"
+tableau_user = "tableau admin username"
+user_password = "tableau admin credentials"
+site_name = "tableau site name"
 # if you're connecting to the default site, pass empty string in site_name
 
 tableau_auth = TSC.TableauAuth(tableau_user, user_password, site_id=site_name)
@@ -21,7 +21,9 @@ def identify_unlicensed():
     with server.auth.sign_in(tableau_auth):
         all_users, pagination_item = server.users.get()
 
-        users_to_delete = {user.name: user.id for user in all_users if user.site_role == 'Unlicensed'}
+        users_to_delete = {
+            user.name: user.id for user in all_users if user.site_role == "Unlicensed"
+        }
         print(f"There are {len(users_to_delete.keys())} unlicensed users on site")
 
         for u in users_to_delete.keys():
@@ -31,7 +33,7 @@ def identify_unlicensed():
 
 def identify_user_wbks(users_to_delete):
     with server.auth.sign_in(tableau_auth):
-        all_users, pagination_item = server.users.get()     # get all users on site
+        all_users, pagination_item = server.users.get()  # get all users on site
         unlicensed = [k for k in users_to_delete.keys()]
         owner_ids = [v for v in users_to_delete.values()]
         print(unlicensed)
@@ -54,6 +56,7 @@ def identify_user_wbks(users_to_delete):
         print(f"{[k for k in unlicensed_user_wbks.keys()]}")
     return unlicensed_user_wbks
 
+
 # below you can see how to re-assign existing content
 # https://github.com/ateneva/Tableau/blob/main/APIs/12_reassign_multiple_workbooks.py
 
@@ -65,25 +68,24 @@ def delete_wbks(unlicensed_user_wbks):
             print(wbk_id)
             server.workbooks.get_by_id(wbk_id)
             server.workbooks.delete(wbk_id)
-            print(f'Deleted wbk_id {wbk_name}')
-    print(f'Deleted all workbooks from {[k for k in unlicensed_user_wbks.keys()]}')
+            print(f"Deleted wbk_id {wbk_name}")
+    print(f"Deleted all workbooks from {[k for k in unlicensed_user_wbks.keys()]}")
 
 
 def delete_users(users_to_delete):
     # sign in
     with server.auth.sign_in(tableau_auth):
-
         # delete users
         for u, i in users_to_delete.items():
             server.users.remove(i)
-            print(f'{u} removed')
+            print(f"{u} removed")
 
         # check that all unlicensed users have been deleted
         left_unlicensed = [u for u in users_to_delete.keys()]
         print(f"{len(left_unlicensed)} unlicensed users were removed from site")
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     identify_user_wbks(identify_unlicensed())
     delete_wbks(identify_user_wbks(identify_unlicensed()))
     delete_users(identify_unlicensed())

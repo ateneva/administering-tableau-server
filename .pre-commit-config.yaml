@@ -1,0 +1,42 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.3.0
+    hooks:
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-yaml
+        include: \.(yaml|yml)$
+
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.4.4
+    hooks:
+      - id: ruff
+        args: [ check --fix .]
+      - id: ruff-format
+
+  - repo: https://github.com/pycqa/pylint
+    rev: v4.0.5
+    hooks:
+      - id: pylint
+        files: \.py$
+
+  - repo: https://github.com/sqlfluff/sqlfluff
+    rev: 3.2.3
+    hooks:
+      - id: sqlfluff-lint
+      - id: sqlfluff-fix
+
+  - repo: https://github.com/igorshubovych/markdownlint-cli
+    rev: v0.40.0
+    hooks:
+      - id: markdownlint
+        # It automatically looks for .markdownlint.yaml in the root
+        args: ["--config", ".markdownlint.yaml", "--fix"]
+
+  - repo: local
+    hooks:
+      - id: terraform-fmt
+        name: terraform format
+        entry: terraform fmt
+        language: system
+        files: .tf$
