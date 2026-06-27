@@ -36,14 +36,14 @@ SELECT
 	sysus.name                 AS datasourceowner,
 	dc.id                      AS connectionid,
 
-	-- IP to which the connection is made;  
+	-- IP to which the connection is made;
 	--NULL in case if bigquery and empty string for Excel and google sheets
 	dc.server                  AS connectionserver,
 
 	-- e.g.qlserver, mysql, postgresql, bq, excel, google-sheets etc
 	dc.dbclass                 AS connectiondatabasetype,
 
-	-- the exact database to which the database is connected 
+	-- the exact database to which the database is connected
 	-- if cross-DB connections are used, this will return more than 1 entry
 	dc.dbname                  AS connectiondatabasename,
 	-- e.g. Datasource, Workbook
