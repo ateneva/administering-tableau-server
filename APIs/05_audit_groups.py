@@ -2,11 +2,13 @@ import tableauserverclient as TSC
 import json
 import datetime as dt
 
-now = dt.datetime.today().strftime('%Y%m%d%H%M%S')
+now = dt.datetime.today().strftime("%Y%m%d%H%M%S")
 print(now)
 
 
-def audit_groups(tableau_server, tableau_user, user_password, site_name, local_folder, *args):
+def audit_groups(
+    tableau_server, tableau_user, user_password, site_name, local_folder, *args
+):
     # if you're connecting to the default site, pass empty string in site_name
 
     tableau_auth = TSC.TableauAuth(tableau_user, user_password, site_id=site_name)
@@ -16,9 +18,9 @@ def audit_groups(tableau_server, tableau_user, user_password, site_name, local_f
     with server.auth.sign_in(tableau_auth):
         all_groups, pagination_item = server.groups.get()
 
-        audit_file = file_path + str(now) + '_' + 'audited_groups.json'
+        audit_file = file_path + str(now) + "_" + "audited_groups.json"
 
-        with open(audit_file, 'a') as f:
+        with open(audit_file, "a") as f:
             groups_ls = []
 
             for group in all_groups:
@@ -33,10 +35,10 @@ def audit_groups(tableau_server, tableau_user, user_password, site_name, local_f
                     audited_groups = {
                         "group_id": group.id,
                         "group_name": group.name,
-                        "group_users": group_users
+                        "group_users": group_users,
                     }
                     print(audited_groups)
                     groups_ls.append(audited_groups)
 
             json.dump(groups_ls, f, indent=2)
-        print(f'Audit Complete! Check {audit_file} for further details...:\n')
+        print(f"Audit Complete! Check {audit_file} for further details...:\n")

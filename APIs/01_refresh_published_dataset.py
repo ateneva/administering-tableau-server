@@ -1,7 +1,9 @@
 import tableauserverclient as TSC
 
 
-def refresh_published_datasources(tableau_server, tableau_user, user_password, site_name, *args):
+def refresh_published_datasources(
+    tableau_server, tableau_user, user_password, site_name, *args
+):
     # if you're connecting to the default site, pass empty string in site_name
     # after site name, pass the datasource names as they appear on the server
 
@@ -16,14 +18,22 @@ def refresh_published_datasources(tableau_server, tableau_user, user_password, s
     for trigger in refreshes:
         # pagination item can only list the first 100, therefore use request options to filter for the specific dataset
         req_option = TSC.RequestOptions()
-        req_option.filter.add(TSC.Filter(TSC.RequestOptions.Field.Name, TSC.RequestOptions.Operator.Equals, trigger))
+        req_option.filter.add(
+            TSC.Filter(
+                TSC.RequestOptions.Field.Name,
+                TSC.RequestOptions.Operator.Equals,
+                trigger,
+            )
+        )
 
         with server.auth.sign_in(tableau_auth):
             published, pagination_item = server.datasources.get(req_option)
-            print(f'Datasources {pagination_item.total_available} found on site')
+            print(f"Datasources {pagination_item.total_available} found on site")
 
             for dataset in published:
-                server.datasources.populate_connections(dataset)  # get the connection information
+                server.datasources.populate_connections(
+                    dataset
+                )  # get the connection information
                 connection = dataset.connections[0]
 
                 dataset_id = dataset.id
@@ -35,15 +45,23 @@ def refresh_published_datasources(tableau_server, tableau_user, user_password, s
                 connection_username = connection.username
 
                 print(
-                    dataset_id, '|',
-                    dataset_name, '|',
-                    dataset_type, '|',
-                    dataset_connection_type, '|',
-                    connection_id, '|',
-                    connection_username, '|',
-                    connection_address
+                    dataset_id,
+                    "|",
+                    dataset_name,
+                    "|",
+                    dataset_type,
+                    "|",
+                    dataset_connection_type,
+                    "|",
+                    connection_id,
+                    "|",
+                    connection_username,
+                    "|",
+                    connection_address,
                 )
 
-                if dataset_type != 'hyper':  # hyper files can't be refreshed
-                    server.datasources.refresh(dataset)  # only possible to trigger full refresh
-                    print(dataset_name, 'was triggered for refresh')
+                if dataset_type != "hyper":  # hyper files can't be refreshed
+                    server.datasources.refresh(
+                        dataset
+                    )  # only possible to trigger full refresh
+                    print(dataset_name, "was triggered for refresh")

@@ -4,11 +4,13 @@ from pathlib import Path
 from glob import glob
 import datetime as dt
 
-now = dt.datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+now = dt.datetime.today().strftime("%Y-%m-%d %H:%M:%S")
 print(now)
 
 
-def delete_datasets_from_project(tableau_server, tableau_user, user_password, site_name, published_project):
+def delete_datasets_from_project(
+    tableau_server, tableau_user, user_password, site_name, published_project
+):
     # if you're connecting to the default site, pass empty string in site_name
 
     tableau_auth = TSC.TableauAuth(tableau_user, user_password, site_id=site_name)
@@ -35,11 +37,15 @@ def delete_datasets_from_project(tableau_server, tableau_user, user_password, si
                 "connection_address": connection.server_address,
                 "connection_username": connection.username,
                 "first_created": str(dataset.created_at),
-                "last_updated": str(dataset.updated_at)
-                }
+                "last_updated": str(dataset.updated_at),
+            }
 
             # delete datasets from specified project
-            if dataset.project_name == published_project and connection.connection_type == 'sqlserver':
-                print(f'Deleting {dataset.name} from {dataset.project_name} connected to {connection.connection_type} and last updated on {dataset.updated_at}')
+            if (
+                dataset.project_name == published_project
+                and connection.connection_type == "sqlserver"
+            ):
+                print(
+                    f"Deleting {dataset.name} from {dataset.project_name} connected to {connection.connection_type} and last updated on {dataset.updated_at}"
+                )
                 server.datasources.delete(dataset.id)
-
