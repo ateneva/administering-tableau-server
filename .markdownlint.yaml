@@ -1,0 +1,5 @@
+
+# .markdownlint.yaml
+default: true
+MD013: false # Disable line length limit
+MD007: false # Disable unordered list indentation

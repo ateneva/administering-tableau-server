@@ -1,0 +1,36 @@
+[tool.pylint.messages_control]
+disable = [
+    "E0401",  # disable to import airflow
+    "C0301",  # disable line too long
+    "W0718",  # disable ungrouped exception in except statement
+    "R0801",  # disable similar lines in 2 files
+    "W3101",  # disable missing timeout in requests.get
+    "R1732",  
+    "R1722",  # cosnider using sys.exit
+    "C0114",  # disable missing docstring in public function temorarily
+    "C0103",  # disable constants in lower case temporarily
+    "C0116",  # disable Unnecessary use of a comprehension temporarily
+    "W0611",  # disable unused import temporarily
+    "W0612",  # disable unused variable temporarily
+    "C0411",  # disable wrong import order temporarily
+    "R0913",  # disable too many arguments temporarily
+    "R0914",  # disable too many local variables temporarily
+    "R0917",  # disable too many positional arguments temporarily
+    "W1514",  # disable using open without encoding temporarily
+    "R1721",  # disable unnecessary use of comprehension temporarily
+    "R1714",  # disable consider using any() instead of len() > 0 temporarily
+    "C0201",  # disable consider using enumerate instead of range(len()) temporarily,
+    "W4701",  # cosnider iterating through a copy of a list temporarily,
+    "R1736",  # disable consider using a set instead of a list temporarily,
+    "C0209",  # disable consider using f-string instead of str.format() temporarily,
+]
+
+[tool.ruff.lint] # Add rules you want to ignore globally
+ignore = [
+    "F841",  # local variable is assigned to but never used
+    "E501",  # line too long (another common rule to ignore)
+    "E902",  # file not found (useful for generated files)
+]
+
+[tool.ruff.format]
+quote-style = "double"
