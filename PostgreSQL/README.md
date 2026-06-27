@@ -1,5 +1,5 @@
 
-## Please note
+# Please note
 
 - capturing metadata via PostgreSQL 'workgroup' DB is only possible **if you manage your own Tableau Server instance**
 
@@ -8,7 +8,7 @@
     - access to the repository must be enabled
     - password must be set for the readonly user
 
-```
+```bash
 tsm data-access repository-access enable --repository-username readonly --repository-password <PASSWORD>
 ```
 
