@@ -17,8 +17,8 @@ resource "google_compute_instance" "tableau-server" {
   name                      = "tableau-server-vm"
   machine_type              = "n2-custom-16-65536" # 16 vCPUs, 64GB RAM
   zone                      = "eu-west4-a"
-  tags                      = ["tableau-server"]   # put VM behind a firewall rule that allows Tableau ports (80, 443, 8850)
-  allow_stopping_for_update = true                 # allow the VM to be updated (e.g., resizing)
+  tags                      = ["tableau-server"] # put VM behind a firewall rule that allows Tableau ports (80, 443, 8850)
+  allow_stopping_for_update = true               # allow the VM to be updated (e.g., resizing)
 
   boot_disk {
     initialize_params {
@@ -58,6 +58,6 @@ resource "google_compute_firewall" "tableau_firewall" {
     protocol = "tcp"
     ports    = ["80", "443", "8850"]
   }
-  source_ranges = ["0.0.0.0/0"]       # Restrict this to your office/VPN IP range!
+  source_ranges = ["0.0.0.0/0"] # Restrict this to your office/VPN IP range!
   target_tags   = ["tableau-server"]
 }
