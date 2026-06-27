@@ -12,7 +12,7 @@ provider "google" {
   zone    = "eu-west4-a"
 }
 
-# Create a non-preemptible VM instance with 16 vCPUs, 64GB RAM,a 500GB SSD persistent disk and accessible via static external IP address. 
+# Create a non-preemptible VM instance with 16 vCPUs, 64GB RAM,a 500GB SSD persistent disk and accessible via static external IP address.
 resource "google_compute_instance" "tableau-server" {
   name                      = "tableau-server-vm"
   machine_type              = "n2-custom-16-65536" # 16 vCPUs, 64GB RAM
@@ -49,7 +49,7 @@ resource "google_compute_instance" "tableau-server" {
   }
 }
 
-# Create a Firewall rule to allow Tableau ports and apply it to the VM using the "tableau-server" tag. 
+# Create a Firewall rule to allow Tableau ports and apply it to the VM using the "tableau-server" tag.
 # Adjust source_ranges to restrict access to your office/VPN IP range for better security.
 resource "google_compute_firewall" "tableau_firewall" {
   name    = "allow-tableau-ports"

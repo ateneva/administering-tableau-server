@@ -75,7 +75,7 @@ tabcmd initialuser --server http://localhost --username "<new-admin-username>"
 ```bash
 # review configuration
 tsm configuration get -k gateway.trusted
-tsm configuration get -k gateway.public.host 
+tsm configuration get -k gateway.public.host
 tsm configuration get -k gateway.public.port
 
 # update configuration
@@ -90,8 +90,8 @@ tsm configuration set -k gateway.public.port -v 443
 
 ```bash
 # export topology and configuration data
-tsm settings export -f <filename>.json 
-tsm settings export --output-config-file <path/to/output_file.json> 
+tsm settings export -f <filename>.json
+tsm settings export --output-config-file <path/to/output_file.json>
 
 # backup repository and file store data
 tsm maintenance backup -f <filename>.tsbak -d `
@@ -128,7 +128,7 @@ tsm configuration set -k gateway.trusted -v "server_ip_address"
 
 # increase timeout limit for datasource refreshes
 tsm configuration get -k backgrounder.querylimit
-tsm configuration set -k backgrounder.querylimit -v 10800 
+tsm configuration set -k backgrounder.querylimit -v 10800
 ```
 
 ## Allow access to the PostgreSQL repository
@@ -164,7 +164,7 @@ tsm status
 
 ```bash
 # list all top-level commands or categories
-tsm help command     
+tsm help command
 tsm help <category> tsm help authentication.
 tsm help <category> <command> tsm help authentication open-id
 ```
@@ -173,7 +173,7 @@ tsm help <category> <command> tsm help authentication open-id
 
 If you want to complete remove Tableau Server from a computer, you can use a script provided by Tableau to remove Tableau Server and all related files.
 
-This removes all data as well as server components, so should only be done if you know you want to reset the computer to a pre-Tableau state.  
+This removes all data as well as server components, so should only be done if you know you want to reset the computer to a pre-Tableau state.
 
 - Deactivate any active product keys > `tsm licenses deactivate -k <product_key>`
 
