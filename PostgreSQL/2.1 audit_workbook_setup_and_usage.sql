@@ -106,8 +106,8 @@ WITH
 
 
 SELECT
-	wbk_luid,
-	wbk_id,
+	ws.wbk_luid,
+	ws.wbk_id,
 	ws.wbk_name,
 	ws.wbk_site_name,
 	ws.wbk_project_name,
@@ -147,6 +147,6 @@ FROM workbook_setup AS ws
 
 WHERE
 	1 = 1
-	AND datasources_used_in_wbk LIKE '%datasourcename%'
-	OR wbk_owner IN ('username1', 'username2')
-	OR wbk_name LIKE 'performance%'
+	AND ud.datasources_used_in_wbk LIKE '%datasourcename%'
+	OR ws.wbk_owner IN ('username1', 'username2')
+	OR ws.wbk_name LIKE 'performance%'

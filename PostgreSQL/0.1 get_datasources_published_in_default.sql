@@ -27,5 +27,5 @@ FROM public.datasources AS ds
 	INNER JOIN public.projects AS pr ON ds.project_id = pr.id
 
 WHERE
-	project_id = 1 --Default project
-	AND repository_url NOT LIKE '%embedded%'
+	ds.project_id = 1 --Default project
+	AND ds.repository_url NOT LIKE '%embedded%'

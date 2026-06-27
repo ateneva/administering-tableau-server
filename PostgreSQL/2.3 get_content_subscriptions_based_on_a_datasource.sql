@@ -1,4 +1,5 @@
---check subscriptions for workbooks connected to a particular published datasource
+-- check subscriptions for workbooks connected to a particular published
+-- datasource
 WITH
 	datasources AS (
 		SELECT
@@ -53,8 +54,8 @@ FROM public.subscriptions AS sub
 
 WHERE
 	1 = 1
-	AND datasource_name LIKE '%DS%'
+	AND d.datasource_name LIKE '%DS%'
 
 ORDER BY
-	workbook_id,
-	view_id
+	d.workbook_id,
+	d.view_id

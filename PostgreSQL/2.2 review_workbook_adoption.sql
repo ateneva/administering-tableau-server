@@ -55,11 +55,11 @@ WITH
 			INNER JOIN projects AS prj
 				ON wb.project_id = prj.id
 
-		GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 8, 9, 10, 11, 12
+		GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
 
 		ORDER BY
-			workbook_id,
-			view_id
+			w.workbook_id,
+			w.view_id
 	),
 
 	subscriptions AS (
@@ -115,5 +115,5 @@ FROM wbks AS w
 
 
 ORDER BY
-	workbook_id,
-	view_id
+	w.workbook_id,
+	w.view_id

@@ -29,9 +29,16 @@ WITH
 			-- user who last (re-)published the dataset
 			sysus.name                 AS datasource_owner,
 			dc.id                      AS datasource_connection_id,
-			dc.server                  AS datasource_connected_to,             -- IP to which the connection is made;  NULL in case if bigquery and empty string for Excel and google sheets
-			dc.dbclass                 AS datasource_connection_type,          -- e.g. sqlserver, mysql, postgresql, bigquery, excel-direct, google-sheets. etc
-			dc.dbname                  AS datasource_connection_name,          -- the exact database to which the database is connected --> #if cross-DB connections are used, this will return more than 1 entry
+			dc.server                  AS datasource_connected_to,
+			-- IP to which the connection is made
+			-- NULL in case if bigquery
+			-- empty string for Excel and google sheets
+			dc.dbclass                 AS datasource_connection_type,
+			-- e.g. sqlserver, mysql, postgresql, bigquery
+			-- excel-direct, google-sheets. etc
+			dc.dbname                  AS datasource_connection_name,
+			-- the exact database to which the database is connected
+			-- #if cross-DB connections are used, this will return > 1 entry
 			-- e.g. Datasource, Workbook
 			dc.owner_type              AS connection_type,
 			-- the credentials used to connect to the data
@@ -46,7 +53,9 @@ WITH
 			dc.updated_at              AS connection_last_revised,
 			-- TRUE/FALSE indicator showing if extract is set
 			dc.has_extract             AS connection_uses_extract,
-			dc.caption                 AS connection_friendly_name				-- as seen in Desktop Pane; NB use with caution may be manually overwritten by a user
+			dc.caption                 AS connection_friendly_name
+		-- as seen in Desktop Pane
+		-- NB use with caution, may be manually overwritten
 
 		FROM public.datasources AS ds
 			INNER JOIN public.data_connections AS dc
@@ -68,7 +77,9 @@ WITH
 				ON us.system_user_id = sysus.id
 
 
-		WHERE dc.owner_type = 'Datasource'       --'Datasource' represents a published dataset; 'Workbook' means embedded dataset
+		WHERE dc.owner_type = 'Datasource'
+		--'Datasource' represents a published dataset
+		--'Workbook' means embedded dataset
 
 		ORDER BY
 			ds.project_id,
@@ -97,7 +108,7 @@ WITH
 		GROUP BY
 			hd.datasource_id
 
-		ORDER BY datasource_id
+		ORDER BY hd.datasource_id
 
 	),
 

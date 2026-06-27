@@ -43,7 +43,8 @@ SELECT
 	dc.updated_at              AS connectionlastrevisedon,
 	-- TRUE/FALSE indicator showing if extract is set
 	dc.has_extract             AS connectionusesextract,
-	dc.caption                 AS connectionfriendlyname           -- as seen in Desktop Pane; NB use with caution may be manually overwritten by a user
+	-- connection friendly name - as seen in Desktop Pane
+	dc.caption                 AS connectionfriendlyname
 
 FROM public.datasources AS ds
 	INNER JOIN public.data_connections AS dc

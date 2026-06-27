@@ -28,7 +28,7 @@ SELECT
 	job.task_id,
 	job.run_now,
 	job.creator_id,
-	s.id                    AS site_id,
+	s.id                    AS site_id_from_sites,
 	s.name                  AS site_name,
 	s.url_namespace,
 	s.status,
