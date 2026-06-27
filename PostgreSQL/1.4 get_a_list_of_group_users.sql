@@ -18,4 +18,4 @@ WHERE
 	g.site_id = 1 --Default site
 	AND usg.group_id NOT IN (2) --all users
 
-ORDER BY 1
+ORDER BY usg.group_id

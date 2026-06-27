@@ -55,11 +55,23 @@ WITH
 			INNER JOIN projects AS prj
 				ON wb.project_id = prj.id
 
-		GROUP BY 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12
+		GROUP BY
+			prj.name,
+			v.workbook_id,
+			wb.name,
+			vs.view_id,
+			v.name,
+			v.repository_url,
+			sou.name,
+			v.created_at,
+			v.index,
+			v.title,
+			v.caption,
+			v.fields
 
 		ORDER BY
-			w.workbook_id,
-			w.view_id
+			v.workbook_id,
+			v.id
 	),
 
 	subscriptions AS (
@@ -83,7 +95,9 @@ WITH
 			INNER JOIN system_users AS su
 				ON u.system_user_id = su.id
 
-		GROUP BY 1, 2
+		GROUP BY
+			sub.target_id,
+			sub.target_type
 	)
 
 SELECT
@@ -112,7 +126,6 @@ FROM wbks AS w
 		ON
 			w.view_id = s.target_id			--- capture view subscriptions
 			OR w.workbook_id = s.target_id	--- capture workbook subscriptions
-
 
 ORDER BY
 	w.workbook_id,

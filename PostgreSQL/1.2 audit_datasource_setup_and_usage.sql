@@ -76,14 +76,13 @@ WITH
 			INNER JOIN public.system_users AS sysus
 				ON us.system_user_id = sysus.id
 
-
 		WHERE dc.owner_type = 'Datasource'
 		--'Datasource' represents a published dataset
 		--'Workbook' means embedded dataset
 
 		ORDER BY
 			ds.project_id,
-			ds.name
+			datasource_name
 	),
 
 	ds_access AS (
@@ -125,8 +124,16 @@ WITH
 
 			SUM(ma.view_count) AS num_views
 		FROM public.datasource_metrics_aggregations AS ma
-		GROUP BY 1, 2
-		ORDER BY 2 DESC
+		GROUP BY
+			ma.datasource_id,
+			TO_DATE(
+				CONCAT(
+					CAST(ma.year_index AS text), '-',
+					CAST(ma.month_index AS text), '-',
+					CAST(ma.day_index AS text), '-'
+				), 'YYYY-MM-DD'
+			)
+		ORDER BY date_viewed DESC
 
 	)
 

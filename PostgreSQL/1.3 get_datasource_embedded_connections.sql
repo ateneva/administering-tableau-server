@@ -40,4 +40,4 @@ WHERE
 
 ORDER BY
 	ds.project_id ASC,
-	ds.last_published_at DESC
+	connection_last_published DESC

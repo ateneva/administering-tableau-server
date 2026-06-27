@@ -39,6 +39,14 @@ WHERE
 	g.site_id = 1 --Default site
 	AND usg.group_id NOT IN (2) --all users
 
-GROUP BY 1, 2, 3, 4, 5, 6
+GROUP BY
+	s.name,
+	g.name,
+	sysus.name,
+	sysus.friendly_name,
+	r.id,
+	r.name
 
-ORDER BY 1, 2
+ORDER BY
+	s.name,
+	g.name

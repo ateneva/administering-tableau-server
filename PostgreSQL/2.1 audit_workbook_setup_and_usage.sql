@@ -68,7 +68,10 @@ WITH
 			dc.owner_type = 'Workbook'
 			AND dc.dbclass = 'sqlproxy'
 
-		GROUP BY 1, 2, 3
+		GROUP BY
+			ds.project_id,
+			ds.parent_workbook_id,
+			w.name
 	),
 
 	used_fields AS (
@@ -78,7 +81,7 @@ WITH
 			STRING_AGG(DISTINCT v.fields, ',') AS fields_used_in_wbk
 
 		FROM public.views AS v
-		GROUP BY 1
+		GROUP BY v.workbook_id
 	),
 
 	workbook_usage AS (
@@ -100,10 +103,9 @@ WITH
 			INNER JOIN system_users AS su
 				ON u.system_user_id = su.id
 
-		GROUP BY 1
-		ORDER BY 1
+		GROUP BY v.workbook_id
+		ORDER BY v.workbook_id
 	)
-
 
 SELECT
 	ws.wbk_luid,
@@ -140,10 +142,8 @@ FROM workbook_setup AS ws
 	LEFT JOIN used_fields AS uf
 		ON ws.wbk_id = uf.workbook_id
 
-
 	LEFT JOIN workbook_usage AS wu
 		ON ws.wbk_id = wu.workbook_id
-
 
 WHERE
 	1 = 1
